@@ -1,10 +1,10 @@
 console.log("Hello from src/index.js!");
 
 // Initial State/Data - A list of todos:
-const todos = [
-  { title: 'OOP in Ruby', completed: true },
-  { title: 'Crush this challenge!', completed: false },
-];
+// const todos = [
+//   { title: 'OOP in Ruby', completed: true },
+//   { title: 'Crush this challenge!', completed: false },
+// ];
 
 // Select the Todos-List
 // Hint: It's the <ul> element
@@ -19,9 +19,6 @@ const appendTodo = (element, position = 'afterbegin') => {
 const toggleTodo = (event) => {
   // TODO: Mark a todo as completed and update DOM
   const listItem = event.target;
-  const index = listItem.dataset.index;
-  const todo = todos[index];
-  todo.completed = !todo.completed;
   listItem.classList.toggle('completed');
 };
 
@@ -29,16 +26,14 @@ const removeTodo = (event) => {
   // TODO: Remove a todo from the page and from the todos array
   event.stopPropagation();
   const deleteBtn = event.target;
-  const index = deleteBtn.dataset.index;
-  todos.splice(index);
   deleteBtn.closest('li').remove();
 };
 
-const renderTodo = (todo, index) => {
+const renderTodo = (todo) => {
   // TODO: Return an html string with the todo markup
   const html = `
     <li class="list-item ${todo.completed ? 'completed' : ''}"
-        data-index="${index}"
+        id="${todo._id}"
     >
       <span class="label">${todo.title}</span>
       <span class="actions">
@@ -46,7 +41,7 @@ const renderTodo = (todo, index) => {
                 aria-label="Delete"
                 title="Delete"
                 class="btn-picto">
-                <i class="fas fa-trash" data-index=${index}></i>
+                <i class="fas fa-trash" data-id=${todo._id}></i>
         </button>
       </span>
     </li>
@@ -61,14 +56,44 @@ const renderTodo = (todo, index) => {
   appendTodo(element);
 };
 
-const renderTodos = () => {
+const renderTodos = (todos) => {
   // TODO: Render each todo on the page
-  todos.forEach((todo, index) => renderTodo(todo, index));
+  todos.forEach((todo) => renderTodo(todo));
 };
 
+const baseUrl = 'https://shrouded-river-51602.herokuapp.com'
+const fetchTodos = () => {
+  const url = baseUrl + '/todos';
+  fetch(url)
+    .then(response => response.json())
+    .then((data) => {
+      renderTodos(data);
+    });
+};
+
+const createTodo = (todo) => {
+  const url = baseUrl + '/todos'
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(todo)
+  })
+    .then(response => response.json())
+    .then((data) => {
+      if (data._id) {
+        renderTodo(todo);
+      input.value = '';
+      } else {
+        alert(data.message)
+      }
+    });
+};
 
 // Start Program
-renderTodos();
+fetchTodos();
 
 // Setup Event Listeners
 // const listItems = todosList.querySelectorAll('li');
@@ -91,9 +116,7 @@ form.addEventListener('submit', (event) => {
   }
 
   const newTodo = { title: title, completed: false };
-  renderTodo(newTodo, todos.length);
-  todos.push(newTodo);
-  input.value = '';
+  createTodo(newTodo);
 });
 
 
