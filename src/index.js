@@ -11,9 +11,9 @@ const todos = [
 const todosList = document.getElementById('todos-list');
 
 // Functions
-const appendTodo = (html, position = 'afterbegin') => {
+const appendTodo = (element, position = 'afterbegin') => {
   // TODO: Add a todo to the top of the todos list on the page
-  todosList.insertAdjacentHTML(position, html);
+  todosList.insertAdjacentElement(position, element);
 }
 
 const toggleTodo = (event) => {
@@ -36,7 +36,7 @@ const removeTodo = (event) => {
 
 const renderTodo = (todo, index) => {
   // TODO: Return an html string with the todo markup
-  return `
+  const html = `
     <li class="list-item ${todo.completed ? 'completed' : ''}"
         data-index="${index}"
     >
@@ -51,11 +51,19 @@ const renderTodo = (todo, index) => {
       </span>
     </li>
   `
+  const element = document.createElement('div');
+  element.innerHTML = html;
+  // Marking/Unmarking todos: listItem click event
+  element.addEventListener('click', toggleTodo);
+  // Remove todo from page: trash icon click event
+  element.querySelector('i').addEventListener('click', removeTodo);
+
+  appendTodo(element);
 };
 
 const renderTodos = () => {
   // TODO: Render each todo on the page
-  todos.forEach((todo, index) => appendTodo(renderTodo(todo, index)));
+  todos.forEach((todo, index) => renderTodo(todo, index));
 };
 
 
@@ -63,13 +71,13 @@ const renderTodos = () => {
 renderTodos();
 
 // Setup Event Listeners
-const listItems = todosList.querySelectorAll('li');
-listItems.forEach((listItem,) => {
-  // Marking/Unmarking todos: listItem click event
-  listItem.addEventListener('click', toggleTodo);
-  // Remove todo from page: trash icon click event
-  listItem.querySelector('i').addEventListener('click', removeTodo);
-});
+// const listItems = todosList.querySelectorAll('li');
+// listItems.forEach((listItem,) => {
+//   // Marking/Unmarking todos: listItem click event
+//   listItem.addEventListener('click', toggleTodo);
+//   // Remove todo from page: trash icon click event
+//   listItem.querySelector('i').addEventListener('click', removeTodo);
+// });
 
 // Adding a new todo: Form submit event
 const form = document.querySelector('form');
@@ -83,8 +91,8 @@ form.addEventListener('submit', (event) => {
   }
 
   const newTodo = { title: title, completed: false };
+  renderTodo(newTodo, todos.length);
   todos.push(newTodo);
-  appendTodo(renderTodo(newTodo, todos.length));
   input.value = '';
 });
 
