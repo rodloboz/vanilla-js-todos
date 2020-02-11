@@ -37,8 +37,10 @@ renderTodos();
 
 // Setup Event Listeners
 
-// Adding a new todo: Form submit event
-
 // Marking/Unmarking todos: listItem click event
 
 // Remove todo from page: trash icon click event
+
+// Adding a new todo: Form submit event
+
+
