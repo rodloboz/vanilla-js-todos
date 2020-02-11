@@ -16,7 +16,7 @@ const appendTodo = (html) => {
 }
 
 const toggleTodo = (event) => {
-  // TODO: Mark a todo as completed and 
+  // TODO: Mark a todo as completed and update DOM
 };
 
 const removeTodo = (event) => {
