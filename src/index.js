@@ -35,12 +35,12 @@ const renderTodos = () => {
 // Start Program
 renderTodos();
 
+// Adding a new todo: Form submit event
+
 // Setup Event Listeners
 
 // Marking/Unmarking todos: listItem click event
 
 // Remove todo from page: trash icon click event
-
-// Adding a new todo: Form submit event
 
 
