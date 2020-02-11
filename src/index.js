@@ -2,7 +2,7 @@ console.log("Hello from src/index.js!");
 
 // Initial State/Data - A list of todos:
 const todos = [
-  { title: 'OOP in Ruby', completed: true }
+  { title: 'OOP in Ruby', completed: true },
   { title: 'Crush this challenge!', completed: false },
 ];
 
